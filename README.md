@@ -7,3 +7,30 @@
 - First is EB is deploy under path /var/app/stage then will install everything and moved  to /var/app/current.
 The user in Elastic BeanStalk  webapp not www-data is chown -R webapp:webapp /var/app/staging
 
+- If you want to see the message of the ``echo ""`` command that you set in the configuration files
+check this path : 
+```
+tail /var/log/cfn-init-cmd.log  -n 100
+```
+root
+N5hNSm40IFZJ107y0rCH
+
+
+## How to access database from EC2 Instance of  the EB
+- update RDS inbound to allow access from the security group of the ec2
+- search for the mysql client ``sudo yum search mysql``
+- install the package ``sudo yum install mariadb1011-client-utils.x86_64``
+- install netcat utility ``yum install netcat -y``
+- test the connectivity using using netcat``nc -zv your.us-east-1.rds.amazon.com 306``
+
+## Set Env
+```bash
+# .ebextensions/03_laravel_env.config
+option_settings:
+  aws:elasticbeanstalk:application:environment:
+    APP_NAME: "Larave Demo App"
+    APP_ENV: "local"
+    APP_KEY: "base64:nwf4NnWbUXaJj1V9BDeoIPkAx7w1mOdu77N7fVDiHos="
+    APP_DEBUG: "true"
+    APP_URL: "http://your-staging-url.com"
+```
